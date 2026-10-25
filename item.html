@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Физический квест</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: url('q_bg.gif') center/cover no-repeat fixed;
+    background-color: #1a1a1a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  .page {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  .page.active { display: flex; }
+
+  .panel {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    max-width: 800px;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .intro-text {
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  /* Просто текстовый блок для алфавита */
+  .alphabet {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1.8;
+    word-spacing: 5px;
+  }
+
+  .riddle-text {
+    font-size: 20px;
+    margin-bottom: 25px;
+    line-height: 1.4;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+  }
+
+  .answer-box {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .answer-box input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+    padding: 14px 18px;
+    border: 2px solid rgba(255,255,255,.5);
+    background: rgba(0,0,0,.55);
+    color: #fff;
+    font-size: 18px;
+    border-radius: 40px;
+    outline: none;
+    text-align: center;
+  }
+  .answer-box input:focus { border-color: #00ffff; }
+
+  .btn {
+    padding: 14px 30px;
+    background: rgba(0, 255, 255, 0.2);
+    border: 2px solid #00ffff;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 40px;
+    transition: .25s;
+  }
+  .btn:hover { background: #00ffff; color: #000; transform: scale(1.05); }
+
+  .error {
+    color: #ff6b6b;
+    margin-top: 15px;
+    font-size: 16px;
+    text-shadow: 0 0 6px #000;
+    min-height: 24px;
+  }
+
+  .final-text {
+    font-size: 18px;
+    line-height: 1.6;
+    white-space: pre-line;
+    text-align: left;
+    margin-top: 20px;
+  }
+  .final-text h2 { text-align: center; color: #00ffff; margin-bottom: 15px; }
+  
+  .video-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .video-container video {
+    width: 100%;
+    border-radius: 10px;
+    background: #000;
+    max-height: 40vh;
+  }
+
+  .music-btn {
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 100;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: rgba(0,0,0,.5);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+  }
+
+  max-width: 600px {
+    .alphabet { font-size: 14px; line-height: 1.6; }
+    .riddle-text { font-size: 16px; }
+    .final-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+  <audio id="bgMusic" src="q_music.mp3" loop></audio>
+  <button class="music-btn" id="musicBtn">🔇</button>
+
+  <!-- СТРАНИЦА 1 -->
+  <section class="page active" id="page1">
+    <div class="panel">
+      <div class="intro-text">
+        <b>Реши 7 коротких пунктов. Числа переведи в буквы:</b>
+
+        Английский алфавит по порядку с номерами:
+        
+        <!-- Просто текст в строчку -->
+        <div class="alphabet">
+          A - 1, B - 2, C - 3, D - 4, E - 5, F - 6, G - 7, H - 8, I - 9, J - 10, K - 11, L - 12, M - 13, N - 14, O - 15, P - 16, Q - 17, R - 18, S - 19, T - 20, U - 21, V - 22, W - 23, X - 24, Y - 25, Z - 26.
+        </div>
+        
+        
+
+        <b>А последнее число оставь как есть.</b>
+      </div>
+      <button
+
+
+class="btn" onclick="startGame()">Начать решать</button>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 1 -->
+  <section class="page" id="page2">
+    <div class="panel">
+      <div class="riddle-text">1. Тело падает без начальной скорости с высоты 38 м за 2 с. Найди g, м/с².</div>
+      <div class="answer-box">
+        <input type="text" id="input2" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(2, 19, 'page3')">Ответить</button>
+      </div>
+      <div class="error" id="err2"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 2 -->
+  <section class="page" id="page3">
+    <div class="panel">
+      <div class="riddle-text">2. 4 кг газа имеют плотность 500 кг/м³. Найди объём в литрах.</div>
+      <div class="answer-box">
+        <input type="text" id="input3" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(3, 8, 'page4')">Ответить</button>
+      </div>
+      <div class="error" id="err3"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 3 -->
+  <section class="page" id="page4">
+    <div class="panel">
+      <div class="riddle-text">3. Тело из состояния покоя движется с ускорением 5,5 м/с² 2 с. Найди скорость, м/с.</div>
+      <div class="answer-box">
+        <input type="text" id="input4" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(4, 11, 'page5')">Ответить</button>
+      </div>
+      <div class="error" id="err4"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 4 -->
+  <section class="page" id="page5">
+    <div class="panel">
+      <div class="riddle-text">4. За 4 с через проводник прошёл заряд 60 Кл. Найди силу тока, А.</div>
+      <div class="answer-box">
+        <input type="text" id="input5" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(5, 15, 'page6')">Ответить</button>
+      </div>
+      <div class="error" id="err5"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 5 -->
+  <section class="page" id="page6">
+    <div class="panel">
+      <div class="riddle-text">5. Сила 60 Н сообщает телу ускорение 5 м/с². Найди массу, кг.</div>
+      <div class="answer-box">
+        <input type="text" id="input6" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(6, 12, 'page7')">Ответить</button>
+      </div>
+      <div class="error" id="err6"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 6 -->
+  <section class="page" id="page7">
+    <div class="panel">
+      <div class="riddle-text">6. Найди период маятника длиной 0,25 м, если g = π² м/с². Ответ в секундах.</div>
+      <div class="answer-box">
+        <input type="text" id="input7" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(7, 1, 'page8')">Ответить</button>
+      </div>
+      <div class="error" id="err7"></div>
+    </div>
+  </section>
+
+  <!-- ЗАДАЧКА 7 -->
+  <section class="page" id="page8">
+    <div class="panel">
+      <div class="riddle-text">7. 2 кг воды получили 42 кДж теплоты. На сколько градусов нагрелась вода? c=4200 Дж/(кг·°C).</div>
+      <div class="answer-box">
+        <input type="text" id="input8" placeholder="Введите число..." autocomplete="off">
+        <button class="btn" onclick="checkRiddle(8, 5, 'page9')">Ответить</button>
+      </div>
+      <div class="error" id="err8"></div>
+    </div>
+  </section>
+
+  <!-- ФИНАЛ -->
+  <section class="page" id="page9">
+    <div class="panel">
+      <div class="video-container">
+        <video src="q_video1.mp4" controls></video>
+        <video src="q_video2.mp4" controls></video>
+      </div>
+      <div class="final-text">
+        <h2>Поздравляю тебя с Днём рождения!!</h2>
+Пусть каждый день приносит тебе новые возможности для роста и самореализации. Желаю тебе крепкого здоровья, безграничной энергии, бесконечного вдохновения, точных формул, ни одного потерянного минуса в математике. Ты добрый и целеустремлённый человек, и я верю, что все
+
+
+твои мечты станут реальностью.
+
+Хм, теперь место... В этом месте было потрачено много сил и энергии, просиживано неописуемое количество часов, выпито океан чая и кофе, съедено много Дошиков. Там же мы поняли, что Бога в определённых пределах не существует, а сила измеряется не в правде. Ну и почти научились взламывать Пентагон.
+
+Удачи и ещё раз с праздником!
+      </div>
+    </div>
+  </section>
+
+<script>
+  const bgMusic = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicBtn');
+  
+  // Функция запуска музыки
+  function playMusic() {
+    if (bgMusic.paused) {
+      bgMusic.volume = 0.2;
+      bgMusic.play().then(() => {
+        musicBtn.textContent = '🔊';
+      }).catch(err => {
+        console.log("Музыка не запустилась. Проверь файл q_music.mp3");
+      });
+    }
+  }
+
+  // Кнопка вкл/выкл музыки
+  musicBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (bgMusic.paused) {
+      playMusic();
+    } else {
+      bgMusic.pause();
+      musicBtn.textContent = '🔇';
+    }
+  });
+
+  // Старт игры (включает музыку и переключает страницу)
+  function startGame() {
+    playMusic(); // Включаем музыку
+    switchPage('page2'); // Идем на 1 задачу
+  }
+
+  // Переключение страниц
+  function switchPage(nextPageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(nextPageId);
+    
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+    } else {
+      alert("ОШИБКА: Страница " + nextPageId + " не найдена!");
+    }
+
+    if (nextPageId === 'page9') {
+      bgMusic.pause();
+      musicBtn.textContent = '🔇';
+    }
+  }
+
+  // Проверка ответов
+  function checkRiddle(pageNum, correctAns, nextPageId) {
+    const input = document.getElementById('input' + pageNum).value;
+    const errEl = document.getElementById('err' + pageNum);
+    
+    let cleanInput = input.replace(',', '.').replace(/[^0-9.]/g, '');
+    let userAns = parseFloat(cleanInput);
+
+    if (Math.abs(userAns - correctAns) < 0.01) {
+      errEl.textContent = '';
+      switchPage(nextPageId);
+    } else {
+      errEl.textContent = 'Неверно. Попробуй посчитать ещё раз.';
+    }
+  }
+
+  // Нажатие Enter в полях ввода
+  for(let i = 2; i <= 8; i++) {
+    let inputEl = document.getElementById('input' + i);
+    if(inputEl) {
+      inputEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.parentElement.querySelector('button').click();
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>
+
+
+
+
+
